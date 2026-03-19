@@ -1,0 +1,1 @@
+The Smart Education Planner is a web-based application designed to help students efficiently manage their academic schedules, tasks, and learning goals. The main objective of this project is to provide a smart and organized way for students to plan their studies, track progress, and improve productivity.
