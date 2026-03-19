@@ -1,0 +1,403 @@
+<html lang="en">
+ <head>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script><!-- CSS Styles -->
+  
+ <link rel="stylesheet" href="styles.css">
+  
+  
+
+  
+ </head>
+ <style>@view-transition { navigation: auto; }</style>
+
+ <body class="min-h-full bg-gradient-to-br from-blue-50 to-indigo-100">
+  <div id="app" class="min-h-full"><!-- Navigation Bar -->
+   <nav class="bg-white shadow-lg border-b-2 border-indigo-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4">
+     <div class="flex justify-between items-center h-16">
+      <div class="flex items-center space-x-4">
+       <div class="text-2xl">
+        📚
+       </div>
+       <h1 id="app-title" class="text-2xl font-bold text-indigo-800">Study Planner</h1>
+      </div>
+      <div class="flex space-x-2"><button onclick="showSection('dashboard')" class="nav-btn btn-animate bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors nav-active"> Dashboard </button> <button onclick="showSection('tasks')" class="nav-btn btn-animate bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"> Tasks </button> <button onclick="showSection('calendar')" class="nav-btn btn-animate bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"> Calendar </button> <button onclick="showSection('library')" class="nav-btn btn-animate bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"> Library </button> <button onclick="showSection('quiz')" class="nav-btn btn-animate bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"> Quiz </button>
+      </div>
+     </div>
+    </div>
+   </nav><!-- DASHBOARD SECTION -->
+   <section id="dashboard-section" class="section-content p-6 fade-in">
+    <div class="max-w-7xl mx-auto"><!-- Header -->
+     <div class="mb-8 text-center">
+      <h2 class="text-4xl font-bold text-gray-800 mb-3">📊 Dashboard</h2>
+      <p id="welcome-message" class="text-xl text-gray-600">Welcome to your study planner</p>
+     </div><!-- Stats Cards -->
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 card-hover">
+       <div class="flex items-center justify-between">
+        <div>
+         <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Tasks</h3>
+         <p id="total-tasks" class="text-3xl font-bold text-blue-600">0</p>
+        </div>
+        <div class="text-4xl text-blue-500">
+         📝
+        </div>
+       </div>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500 card-hover">
+       <div class="flex items-center justify-between">
+        <div>
+         <h3 class="text-lg font-semibold text-gray-700 mb-2">Completed</h3>
+         <p id="completed-tasks" class="text-3xl font-bold text-green-600">0</p>
+        </div>
+        <div class="text-4xl text-green-500">
+         ✅
+        </div>
+       </div>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500 card-hover">
+       <div class="flex items-center justify-between">
+        <div>
+         <h3 class="text-lg font-semibold text-gray-700 mb-2">Study Time</h3>
+         <p id="total-study-time" class="text-3xl font-bold text-orange-600">0h</p>
+        </div>
+        <div class="text-4xl text-orange-500">
+         ⏰
+        </div>
+       </div>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500 card-hover">
+       <div class="flex items-center justify-between">
+        <div>
+         <h3 class="text-lg font-semibold text-gray-700 mb-2">Quiz Score</h3>
+         <p id="quiz-score" class="text-3xl font-bold text-purple-600">0%</p>
+        </div>
+        <div class="text-4xl text-purple-500">
+         🎯
+        </div>
+       </div>
+      </div>
+     </div><!-- Recent Activity -->
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+       <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center"><span class="mr-2">📋</span> Recent Tasks</h3>
+       <div id="recent-tasks" class="space-y-3 custom-scrollbar max-h-64 overflow-y-auto">
+        <div class="text-center py-8 text-gray-500">
+         <div class="text-4xl mb-2">
+          📝
+         </div>
+         <p>No tasks yet. Create your first task!</p>
+        </div>
+       </div>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+       <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center"><span class="mr-2">⏰</span> Upcoming Deadlines</h3>
+       <div id="upcoming-deadlines" class="space-y-3 custom-scrollbar max-h-64 overflow-y-auto">
+        <div class="text-center py-8 text-gray-500">
+         <div class="text-4xl mb-2">
+          📅
+         </div>
+         <p>No upcoming deadlines</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- TASKS SECTION -->
+   <section id="tasks-section" class="section-content hidden p-6">
+    <div class="max-w-7xl mx-auto"><!-- Header -->
+     <div class="flex justify-between items-center mb-8">
+      <div>
+       <h2 class="text-4xl font-bold text-gray-800 flex items-center"><span class="mr-3">📝</span> Tasks</h2>
+       <p class="text-gray-600 mt-2">Manage your study tasks and track progress</p>
+      </div><button onclick="showAddTaskModal()" class="btn-animate bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold shadow-lg"> ➕ Add Task </button>
+     </div>
+     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8"><!-- Tasks List -->
+      <div class="lg:col-span-2">
+       <div class="bg-white rounded-xl shadow-lg p-6"><!-- Filter and Sort Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6"><!-- Filter Buttons -->
+         <div class="flex space-x-2"><button onclick="filterTasks('all')" class="filter-btn btn-animate bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm"> All Tasks </button> <button onclick="filterTasks('pending')" class="filter-btn btn-animate bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm"> Pending </button> <button onclick="filterTasks('completed')" class="filter-btn btn-animate bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm"> Completed </button>
+         </div><!-- Sort Controls -->
+         <div class="flex items-center space-x-3"><label class="text-sm font-medium text-gray-700">Sort by:</label> <select id="task-sort" onchange="sortTasks()" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white"> <option value="created">📅 Date Created</option> <option value="priority">🎯 Priority</option> <option value="dueDate">⏰ Due Date</option> <option value="title">📝 Title (A-Z)</option> </select> <button id="sort-order-btn" onclick="toggleSortOrder()" class="btn-animate bg-gray-200 px-3 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm" title="Toggle sort order"> ⬇️ </button>
+         </div>
+        </div><!-- Tasks Container -->
+        <div id="tasks-list" class="space-y-4 custom-scrollbar max-h-96 overflow-y-auto">
+         <div class="text-center py-12 text-gray-500">
+          <div class="text-6xl mb-4">
+           📝
+          </div>
+          <h3 class="text-xl font-semibold mb-2">No tasks yet</h3>
+          <p>Create your first task to get started!</p>
+         </div>
+        </div>
+       </div>
+      </div><!-- Study Timer -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+       <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center"><span class="mr-2">⏱️</span> Study Timer</h3>
+       <div id="timer-container" class="text-center"><!-- Timer Circle -->
+        <div class="timer-container mb-6">
+         <svg class="w-40 h-40 transform -rotate-90"><circle cx="80" cy="80" r="70" stroke="#e5e7eb" stroke-width="8" fill="none"></circle> <circle id="timer-progress" cx="80" cy="80" r="70" stroke="#4f46e5" stroke-width="8" fill="none" class="timer-circle"></circle>
+         </svg>
+         <div class="timer-text"><span id="timer-display" class="text-2xl font-bold text-gray-800">25:00</span>
+         </div>
+        </div><!-- Timer Controls -->
+        <div class="space-y-3 mb-6"><button id="timer-btn" onclick="toggleTimer()" class="btn-animate w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-semibold"> ▶️ Start Timer </button> <button onclick="resetTimer()" class="btn-animate w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"> 🔄 Reset </button>
+        </div><!-- Timer Settings -->
+        <div><label class="block text-sm font-medium text-gray-700 mb-2">Timer Duration (minutes)</label> <input id="timer-duration" type="number" value="25" min="1" max="120" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- CALENDAR SECTION -->
+   <section id="calendar-section" class="section-content hidden p-6">
+    <div class="max-w-7xl mx-auto"><!-- Header -->
+     <div class="flex justify-between items-center mb-8">
+      <div>
+       <h2 class="text-4xl font-bold text-gray-800 flex items-center"><span class="mr-3">📅</span> Calendar</h2>
+       <p class="text-gray-600 mt-2">View your tasks and deadlines</p>
+      </div>
+      <div class="flex items-center space-x-4"><button onclick="previousMonth()" class="btn-animate bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"> ← Previous </button>
+       <h3 id="calendar-month" class="text-2xl font-semibold text-gray-800 min-w-48 text-center"></h3><button onclick="nextMonth()" class="btn-animate bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"> Next → </button>
+      </div>
+     </div><!-- Calendar -->
+     <div class="bg-white rounded-xl shadow-lg p-6"><!-- Day Headers -->
+      <div class="grid grid-cols-7 gap-2 mb-4">
+       <div class="text-center font-bold text-gray-700 py-3 bg-gray-50 rounded-lg">
+        Sunday
+       </div>
+       <div class="text-center font-bold text-gray-700 py-3 bg-gray-50 rounded-lg">
+        Monday
+       </div>
+       <div class="text-center font-bold text-gray-700 py-3 bg-gray-50 rounded-lg">
+        Tuesday
+       </div>
+       <div class="text-center font-bold text-gray-700 py-3 bg-gray-50 rounded-lg">
+        Wednesday
+       </div>
+       <div class="text-center font-bold text-gray-700 py-3 bg-gray-50 rounded-lg">
+        Thursday
+       </div>
+       <div class="text-center font-bold text-gray-700 py-3 bg-gray-50 rounded-lg">
+        Friday
+       </div>
+       <div class="text-center font-bold text-gray-700 py-3 bg-gray-50 rounded-lg">
+        Saturday
+       </div>
+      </div><!-- Calendar Grid -->
+      <div id="calendar-grid" class="grid grid-cols-7 gap-2"><!-- Calendar days will be generated here -->
+      </div>
+     </div>
+    </div>
+   </section><!-- LIBRARY SECTION -->
+   <section id="library-section" class="section-content hidden p-6">
+    <div class="max-w-7xl mx-auto"><!-- Library Content -->
+     <div id="library-content"><!-- Header -->
+      <div class="flex justify-between items-center mb-8">
+       <div>
+        <h2 class="text-4xl font-bold text-gray-800 flex items-center"><span class="mr-3">📚</span> Library</h2>
+        <p class="text-gray-600 mt-2">Your personal study resource collection</p>
+       </div><button onclick="showResourceAuthModal()" class="btn-animate bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold"> ➕ Add Resource </button>
+      </div><!-- Resources -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+       <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center"><span class="mr-2">📖</span> Study Resources</h3>
+       <div id="resources-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="col-span-full text-center py-12 text-gray-500">
+         <div class="text-6xl mb-4">
+          📚
+         </div>
+         <h3 class="text-xl font-semibold mb-2">No resources yet</h3>
+         <p>Add your first study resource!</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- QUIZ SECTION -->
+   <section id="quiz-section" class="section-content hidden p-6">
+    <div class="max-w-6xl mx-auto"><!-- Header -->
+     <div class="flex justify-between items-center mb-8">
+      <div>
+       <h2 class="text-4xl font-bold text-gray-800 flex items-center"><span class="mr-3">🎯</span> Quiz Section</h2>
+       <p class="text-gray-600 mt-2">Test your knowledge and track progress</p>
+      </div><button onclick="showQuestionAuthModal()" class="btn-animate bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold"> ➕ Add Question </button>
+     </div>
+     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8"><!-- Quiz Area -->
+      <div class="lg:col-span-2">
+       <div class="bg-white rounded-xl shadow-lg p-8"><!-- Quiz Start Screen -->
+        <div id="quiz-start" class="text-center">
+         <div class="text-6xl mb-6">
+          🧠
+         </div>
+         <h3 class="text-3xl font-semibold text-gray-800 mb-4">Ready to Test Your Knowledge?</h3>
+         <p class="text-gray-600 mb-8 text-lg">Challenge yourself with quiz questions</p><button onclick="startQuiz()" class="btn-animate bg-green-600 text-white px-8 py-4 rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg"> 🚀 Start Quiz </button>
+        </div><!-- Quiz Content -->
+        <div id="quiz-content" class="hidden"><!-- Progress Bar -->
+         <div class="mb-6">
+          <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium text-gray-600">Progress</span> <span id="quiz-progress" class="text-sm font-medium text-gray-600">1 / 5</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-3">
+           <div id="quiz-progress-bar" class="bg-indigo-600 h-3 rounded-full progress-bar" style="width: 20%"></div>
+          </div>
+         </div><!-- Question -->
+         <div id="question-container" class="mb-8">
+          <h3 id="current-question" class="text-2xl font-semibold text-gray-800 mb-6">Question will appear here</h3>
+          <div id="answer-options" class="space-y-3"><!-- Answer options will be generated here -->
+          </div>
+         </div><!-- Navigation -->
+         <div class="flex justify-between"><button id="prev-question" onclick="previousQuestion()" class="btn-animate bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors" disabled> ← Previous </button> <button id="next-question" onclick="nextQuestion()" class="btn-animate bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"> Next → </button>
+         </div>
+        </div><!-- Quiz Results -->
+        <div id="quiz-results" class="hidden text-center">
+         <div class="text-6xl mb-6">
+          🎉
+         </div>
+         <h3 class="text-3xl font-semibold text-gray-800 mb-4">Quiz Complete!</h3>
+         <div class="text-8xl font-bold text-indigo-600 mb-4" id="final-score">
+          0%
+         </div>
+         <p class="text-xl text-gray-600 mb-8" id="score-message">Great job!</p><button onclick="restartQuiz()" class="btn-animate bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold"> 🔄 Take Quiz Again </button>
+        </div>
+       </div>
+      </div><!-- Question Bank -->
+      
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+  </div><!-- MODALS --> <!-- Add Task Modal -->
+  <div id="add-task-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 fade-in">
+    <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center"><span class="mr-2">➕</span> Add New Task</h3>
+    <form id="add-task-form" class="space-y-4">
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Task Title</label> <input id="task-title" type="text" required placeholder="Enter task title" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+     </div>
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Description</label> <textarea id="task-description" rows="3" placeholder="Task description (optional)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+     </div>
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Due Date</label> <input id="task-due-date" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+     </div>
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Priority</label> <select id="task-priority" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"> <option value="low">🟢 Low Priority</option> <option value="medium" selected>🟡 Medium Priority</option> <option value="high">🔴 High Priority</option> </select>
+     </div>
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Study Timer (minutes)</label> <input id="task-timer" type="number" value="25" min="1" max="120" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+     </div>
+     <div class="flex space-x-4 pt-4"><button type="button" onclick="hideAddTaskModal()" class="btn-animate flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"> Cancel </button> <button type="submit" class="btn-animate flex-1 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"> Add Task </button>
+     </div>
+    </form>
+   </div>
+  </div><!-- Add Resource Modal -->
+  <div id="add-resource-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 fade-in">
+    <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center"><span class="mr-2">📚</span> Add Study Resource</h3>
+    <form id="add-resource-form" class="space-y-4">
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Resource Title</label> <input id="resource-title" type="text" required placeholder="Enter resource title" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+     </div>
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Resource Type</label> <select id="resource-type" onchange="toggleResourceInput()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4"> <option value="text">📝 Text Content</option> <option value="file">📎 File Upload</option> </select>
+     </div><!-- Text Content Input -->
+     <div id="text-content-input"><label class="block text-sm font-medium text-gray-700 mb-2">Content</label> <textarea id="resource-content" rows="6" placeholder="Enter your study notes, formulas, or key concepts..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+     </div><!-- File Upload Input -->
+     <div id="file-upload-input" class="hidden"><label class="block text-sm font-medium text-gray-700 mb-2">Upload File</label>
+      <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-400 transition-colors"><input type="file" id="resource-file" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.ppt,.pptx,.xls,.xlsx" class="hidden" onchange="handleFileSelect(event)">
+       <div id="file-drop-zone" onclick="document.getElementById('resource-file').click()" class="cursor-pointer">
+        <div class="text-4xl mb-2">
+         📁
+        </div>
+        <p class="text-gray-600 mb-2">Click to upload or drag and drop</p>
+        <p class="text-sm text-gray-500">PDF, DOC, DOCX, TXT, JPG, PNG, PPT, XLS (Max 200MB)</p>
+       </div>
+       <div id="file-preview" class="hidden mt-4 p-4 bg-gray-50 rounded-lg">
+        <div class="flex items-center justify-between">
+         <div class="flex items-center space-x-3">
+          <div id="file-icon" class="text-2xl"></div>
+          <div>
+           <p id="file-name" class="font-medium text-gray-800"></p>
+           <p id="file-size" class="text-sm text-gray-600"></p>
+          </div>
+         </div><button type="button" onclick="clearFileSelection()" class="text-red-600 hover:text-red-800 text-sm bg-red-50 hover:bg-red-100 px-3 py-1 rounded transition-colors"> 🗑️ Remove </button>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Category</label> <input id="resource-category" type="text" placeholder="e.g., Math, Science, History" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+     </div>
+     <div class="flex space-x-4 pt-4"><button type="button" onclick="hideAddResourceModal()" class="btn-animate flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"> Cancel </button> <button type="submit" class="btn-animate flex-1 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"> Add Resource </button>
+     </div>
+    </form>
+   </div>
+  </div><!-- Resource Author Authentication Modal -->
+  <div id="resource-auth-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 fade-in">
+    <div class="text-center">
+     <div class="text-6xl mb-4">
+      🔐
+     </div>
+     <h3 class="text-2xl font-semibold text-gray-800 mb-2">Author Access Required</h3>
+     <p class="text-gray-600 mb-6">Enter author password to upload resources</p>
+     <div class="space-y-4">
+      <div><label class="block text-sm font-medium text-gray-700 mb-2 text-left">Author Password</label> <input id="resource-auth-password" type="password" placeholder="Enter author password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div class="flex space-x-4"><button onclick="hideResourceAuthModal()" class="btn-animate flex-1 bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors font-semibold"> Cancel </button> <button onclick="authenticateResourceAuthor()" class="btn-animate flex-1 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold"> 🔓 Authenticate </button>
+      </div>
+      <div id="resource-auth-error" class="text-red-600 text-sm hidden">
+       ❌ Incorrect password. Access denied.
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Question Author Authentication Modal -->
+  <div id="question-auth-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 fade-in">
+    <div class="text-center">
+     <div class="text-6xl mb-4">
+      🔐
+     </div>
+     <h3 class="text-2xl font-semibold text-gray-800 mb-2">Author Access Required</h3>
+     <p class="text-gray-600 mb-6">Enter author password to create questions</p>
+     <div class="space-y-4">
+      <div><label class="block text-sm font-medium text-gray-700 mb-2 text-left">Author Password</label> <input id="question-auth-password" type="password" placeholder="Enter author password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div class="flex space-x-4"><button onclick="hideQuestionAuthModal()" class="btn-animate flex-1 bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors font-semibold"> Cancel </button> <button onclick="authenticateQuestionAuthor()" class="btn-animate flex-1 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold"> 🔓 Authenticate </button>
+      </div>
+      <div id="question-auth-error" class="text-red-600 text-sm hidden">
+       ❌ Incorrect password. Access denied.
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Image Viewer Modal -->
+  <div id="image-viewer-modal" class="fixed inset-0 bg-black bg-opacity-75 modal-backdrop hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-4xl mx-4 max-h-full overflow-auto fade-in">
+    <div class="flex justify-between items-center mb-4">
+     <h3 id="image-viewer-title" class="text-xl font-semibold text-gray-800">Image Preview</h3><button onclick="hideImageViewer()" class="btn-animate text-gray-600 hover:text-gray-800 text-2xl"> ✕ </button>
+    </div>
+    <div class="text-center"><img id="image-viewer-img" src="" alt="Preview" class="max-w-full max-h-96 rounded-lg shadow-lg mx-auto">
+    </div>
+   </div>
+  </div><!-- Add Question Modal -->
+  <div id="add-question-modal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 fade-in">
+    <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center"><span class="mr-2">❓</span> Add Quiz Question</h3>
+    <form id="add-question-form" class="space-y-4">
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Question</label> <textarea id="question-text" rows="3" required placeholder="Enter your question..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+     </div>
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Answer Options (one per line)</label> <textarea id="question-options" rows="4" required placeholder="Option A
+Option B
+Option C
+Option D" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+     </div>
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Correct Answer</label> <input id="correct-answer" type="text" required placeholder="Enter the correct option exactly as written above" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+     </div>
+     <div class="flex space-x-4 pt-4"><button type="button" onclick="hideAddQuestionModal()" class="btn-animate flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"> Cancel </button> <button type="submit" class="btn-animate flex-1 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"> Add Question </button>
+     </div>
+    </form>
+   </div>
+  </div><!-- JavaScript -->
+   <script src="script.js" defer></script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99ec5ebbc727d8a9',t:'MTc2MzE4NDc2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
